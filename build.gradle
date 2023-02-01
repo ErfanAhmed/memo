@@ -50,3 +50,7 @@ liquibase {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+task 'freshRun' (dependsOn: ['dropAll', 'update', 'bootRun'])
+update.mustRunAfter dropAll
+bootRun.mustRunAfter update

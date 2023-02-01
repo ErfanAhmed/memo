@@ -1,8 +1,15 @@
 package com.example.easymemo.controller;
 
+import com.example.easymemo.domain.Product;
+import com.example.easymemo.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author erfan
@@ -12,9 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/test")
 public class ProductController {
 
+    @Autowired
+    private ProductService productService;
+
     @GetMapping
-    public String test() {
-        System.out.println("\n\n\nhello");
-        return "test";
+    public ResponseEntity<Product> test() {
+        List<Product> products = productService.getProducts();
+
+        return new ResponseEntity(products, HttpStatus.OK);
     }
 }
