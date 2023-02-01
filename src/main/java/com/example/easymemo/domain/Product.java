@@ -13,7 +13,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table
 @Entity
+@NamedQueries(
+        @NamedQuery(
+                name = "product.getAll",
+                query = "FROM Product"
+        )
+)
 public class Product extends Persistent {
+
+    private final static long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productSeq")
@@ -24,5 +32,16 @@ public class Product extends Persistent {
     private String name;
 
     @Column
-    private int quantity;
+    private String description;
+
+    @Column
+    private double quantity;
+
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
+
+    @ManyToOne
+    @JoinColumn(name = "unit_id")
+    private Unit unit;
 }
