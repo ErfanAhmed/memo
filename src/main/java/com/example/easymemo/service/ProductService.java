@@ -21,4 +21,8 @@ public class ProductService {
         return em.createNamedQuery("product.getAll", Product.class)
                 .getResultList();
     }
+
+    public Product findById(long id) {
+        return em.find(Product.class, id);
+    }
 }

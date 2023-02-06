@@ -14,10 +14,7 @@ import javax.persistence.*;
 @Table
 @Entity
 @NamedQueries(
-        @NamedQuery(
-                name = "product.getAll",
-                query = "FROM Product"
-        )
+        @NamedQuery(name = "product.getAll", query = "FROM Product")
 )
 public class Product extends Persistent {
 
@@ -32,16 +29,21 @@ public class Product extends Persistent {
     private String name;
 
     @Column
-    private String description;
+    private Double quantity;
 
     @Column
-    private double quantity;
+    private String description;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id")
-    private Brand brand;
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     @ManyToOne
     @JoinColumn(name = "unit_id")
     private Unit unit;
+
+    public String getProductDetails() {
+        return "Product name: " + name
+                + "\n Available quantity: " + quantity + " " + unit.getName();
+    }
 }
