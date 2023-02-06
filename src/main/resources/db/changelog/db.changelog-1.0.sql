@@ -51,6 +51,19 @@ CREATE SEQUENCE product_seq START WITH 1 INCREMENT BY 1;
 -- rollback DROP TABLE product;
 -- rollback DROP SEQUENCE product_seq;
 
+-- changeset erfan:4
+-- comment: create quantity_per_unit
+CREATE TABLE quantity_per_unit (
+   id          BIGINT,
+   amount      INT NOT NULL,
+   unit_id     INT,
+   created     TIMESTAMP,
+   updated     TIMESTAMP,
+   version     INT,
+   CONSTRAINT pk_quantity_per_unit PRIMARY KEY (id),
+   CONSTRAINT fk_unit_id FOREIGN KEY (unit_id) REFERENCES unit(id)
+);
+
 /* doesn't work upto liquibase core v 4.18.0]
     rollback none
     rollback empty

@@ -34,6 +34,10 @@ public class Product extends Persistent {
     @Column
     private String description;
 
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private QuantityPerUnit quantityPerUnit;
+
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
@@ -44,6 +48,8 @@ public class Product extends Persistent {
 
     public String getProductDetails() {
         return "Product name: " + name
+                + " " + quantityPerUnit.getAmount()
+                + " " + quantityPerUnit.getUnit().getName()
                 + "\n Available quantity: " + quantity + " " + unit.getName();
     }
 }
