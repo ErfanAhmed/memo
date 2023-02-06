@@ -5,9 +5,7 @@ import com.example.easymemo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,16 +14,23 @@ import java.util.List;
  * @since 1/12/23
  */
 @RestController
-@RequestMapping(value = "/test")
+@RequestMapping(value = "/v1/products")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<Product> test() {
+    public ResponseEntity<Product> list() {
         List<Product> products = productService.getProducts();
 
         return new ResponseEntity(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> show(@PathVariable long id) {
+        Product product = productService.findById(id);
+
+        return new ResponseEntity(product.getProductDetails(), HttpStatus.OK);
     }
 }

@@ -13,13 +13,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table
 @Entity
-public class Brand extends Persistent {
+public class Company extends Persistent {
 
     private final static long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brandSeq")
-    @SequenceGenerator(name = "brandSeq", sequenceName = "brand_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "companySeq")
+    @SequenceGenerator(name = "companySeq", sequenceName = "company_seq", allocationSize = 1)
     private int id;
 
     @Column(nullable = false)

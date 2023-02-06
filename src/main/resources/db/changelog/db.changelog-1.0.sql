@@ -17,34 +17,34 @@ CREATE SEQUENCE unit_seq START WITH 1 INCREMENT BY 1;
 
 -- changeset erfan:2
 -- comment: create brand
-CREATE TABLE brand (
+CREATE TABLE company (
     id          INT NOT NULL,
     name        VARCHAR(100) NOT NULL,
     created     TIMESTAMP,
     updated     TIMESTAMP,
     version     INT,
-    CONSTRAINT pk_brand PRIMARY KEY (id)
+    CONSTRAINT pk_company PRIMARY KEY (id)
 );
 
-CREATE SEQUENCE brand_seq START WITH 1 INCREMENT BY 1;
--- rollback DROP TABLE brand;
--- rollback DROP SEQUENCE brand_seq;
+CREATE SEQUENCE company_seq START WITH 1 INCREMENT BY 1;
+-- rollback DROP TABLE company;
+-- rollback DROP SEQUENCE company_seq;
 
 -- changeset erfan:3
 -- comment: create product
 CREATE TABLE product (
-    id          BIGINT NOT NULL,
-    name        VARCHAR(200) NOT NULL,
-    description VARCHAR(3000),
-    quantity    DOUBLE PRECISION,
-    brand_id    INT,
-    unit_id     INT,
-    created     TIMESTAMP,
-    updated     TIMESTAMP,
-    version     INT,
+    id                BIGINT       NOT NULL,
+    name              VARCHAR(200) NOT NULL,
+    quantity          DOUBLE PRECISION,
+    description       VARCHAR(3000),
+    unit_id           INT,
+    company_id        INT,
+    created           TIMESTAMP,
+    updated           TIMESTAMP,
+    version           INT,
     CONSTRAINT pk_product PRIMARY KEY (id),
-    CONSTRAINT fk_brand_id FOREIGN KEY (brand_id) REFERENCES brand(id),
-    CONSTRAINT fk_unit_id FOREIGN KEY (unit_id) REFERENCES unit(id)
+    CONSTRAINT fk_unit_id FOREIGN KEY (unit_id) REFERENCES unit (id),
+    CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES company (id)
 );
 
 CREATE SEQUENCE product_seq START WITH 1 INCREMENT BY 1;
