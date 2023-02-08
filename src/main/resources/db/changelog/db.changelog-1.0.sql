@@ -43,8 +43,8 @@ CREATE TABLE product (
     updated           TIMESTAMP,
     version           INT,
     CONSTRAINT pk_product PRIMARY KEY (id),
-    CONSTRAINT fk_unit_id FOREIGN KEY (unit_id) REFERENCES unit (id),
-    CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES company (id)
+    CONSTRAINT fk_p_unit_id FOREIGN KEY (unit_id) REFERENCES unit (id),
+    CONSTRAINT fk_p_company_id FOREIGN KEY (company_id) REFERENCES company (id)
 );
 
 CREATE SEQUENCE product_seq START WITH 1 INCREMENT BY 1;
@@ -54,14 +54,27 @@ CREATE SEQUENCE product_seq START WITH 1 INCREMENT BY 1;
 -- changeset erfan:4
 -- comment: create quantity_per_unit
 CREATE TABLE quantity_per_unit (
-   id          BIGINT,
-   amount      INT NOT NULL,
-   unit_id     INT,
-   created     TIMESTAMP,
-   updated     TIMESTAMP,
-   version     INT,
-   CONSTRAINT pk_quantity_per_unit PRIMARY KEY (id),
-   CONSTRAINT fk_unit_id FOREIGN KEY (unit_id) REFERENCES unit(id)
+    id          BIGINT,
+    amount      INT NOT NULL,
+    unit_id     INT,
+    created     TIMESTAMP,
+    updated     TIMESTAMP,
+    version     INT,
+    CONSTRAINT pk_quantity_per_unit PRIMARY KEY (id),
+    CONSTRAINT fk_qpu_unit_id FOREIGN KEY (unit_id) REFERENCES unit(id)
+);
+
+-- changeset erfan:5
+-- comment: create quantity_per_unit
+CREATE TABLE unit_details (
+    id          BIGINT,
+    amount      INT NOT NULL,
+    unit_id     INT,
+    created     TIMESTAMP,
+    updated     TIMESTAMP,
+    version     INT,
+    CONSTRAINT pk_unit_details PRIMARY KEY (id),
+    CONSTRAINT fk_ud_unit_id FOREIGN KEY (unit_id) REFERENCES unit(id)
 );
 
 /* doesn't work upto liquibase core v 4.18.0]

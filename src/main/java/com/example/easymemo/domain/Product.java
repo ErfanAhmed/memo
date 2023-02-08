@@ -1,9 +1,11 @@
 package com.example.easymemo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * @author erfan
@@ -34,10 +36,6 @@ public class Product extends Persistent {
     @Column
     private String description;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private QuantityPerUnit quantityPerUnit;
-
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
@@ -46,10 +44,34 @@ public class Product extends Persistent {
     @JoinColumn(name = "unit_id")
     private Unit unit;
 
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private QuantityPerUnit quantityPerUnit;
+
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private UnitDetails unitDetails;
+
+    @JsonIgnore
     public String getProductDetails() {
         return "Product name: " + name
-                + " " + quantityPerUnit.getAmount()
-                + " " + quantityPerUnit.getUnit().getName()
-                + "\n Available quantity: " + quantity + " " + unit.getName();
+                + " " + quantityPerUnit()
+                + "\n Available quantity: " + quantity()
+                + unitDetails();
+    }
+
+    public String quantity() {
+        return quantity + " " + unit.getName();
+    }
+
+    public String unitDetails() {
+        return Objects.nonNull(unitDetails)
+                ? "[" + unitDetails.getAmount() + " " + unitDetails.getUnit().getName() + " per " + unit.getName() + "]"
+                : "";
+    }
+
+    public String quantityPerUnit() {
+        return Objects.nonNull(quantityPerUnit)
+                ? quantityPerUnit.getAmount() + " " + quantityPerUnit.getUnit().getName() : "";
     }
 }

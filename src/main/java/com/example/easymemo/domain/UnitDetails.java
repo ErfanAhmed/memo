@@ -8,16 +8,13 @@ import javax.persistence.*;
 
 /**
  * @author erfan
- * @since 2/6/23
- * <p>
- * i.e. Chilli powder 200gm pack - this 200gm is QuantityPerUnit
- * this is optional
+ * @since 2/8/23
  */
 @Data
 @NoArgsConstructor
 @Table
 @Entity
-public class QuantityPerUnit extends Persistent {
+public class UnitDetails extends Persistent {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,12 +25,12 @@ public class QuantityPerUnit extends Persistent {
     private int amount;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, optional = false)
     @MapsId
     @JoinColumn(name = "id")
     private Product product;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "unit_id")
     private Unit unit;
 }
