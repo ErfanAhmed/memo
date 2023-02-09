@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Objects;
 
+import static java.util.Objects.nonNull;
+
 /**
  * @author erfan
  * @since 1/12/23
@@ -52,6 +54,22 @@ public class Product extends Persistent {
     @PrimaryKeyJoinColumn
     private UnitDetails unitDetails;
 
+    public void setQuantityPerUnit(QuantityPerUnit quantityPerUnit) {
+        this.quantityPerUnit = quantityPerUnit;
+
+        if (nonNull(quantityPerUnit)) {
+            this.quantityPerUnit.setProduct(this);
+        }
+    }
+
+    public void setUnitDetails(UnitDetails unitDetails) {
+        this.unitDetails = unitDetails;
+
+        if (nonNull(unitDetails)) {
+            this.unitDetails.setProduct(this);
+        }
+    }
+
     @JsonIgnore
     public String getProductDetails() {
         return "Product name: " + name
@@ -65,13 +83,13 @@ public class Product extends Persistent {
     }
 
     public String unitDetails() {
-        return Objects.nonNull(unitDetails)
+        return nonNull(unitDetails)
                 ? "[" + unitDetails.getAmount() + " " + unitDetails.getUnit().getName() + " per " + unit.getName() + "]"
                 : "";
     }
 
     public String quantityPerUnit() {
-        return Objects.nonNull(quantityPerUnit)
+        return nonNull(quantityPerUnit)
                 ? quantityPerUnit.getAmount() + " " + quantityPerUnit.getUnit().getName() : "";
     }
 }

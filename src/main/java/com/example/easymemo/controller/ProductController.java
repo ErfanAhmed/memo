@@ -33,4 +33,18 @@ public class ProductController {
 
         return new ResponseEntity(product.getProductDetails(), HttpStatus.OK);
     }
+
+    @PostMapping
+    public ResponseEntity<?> save(@RequestBody Product product) {
+        productService.save(product);
+
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleException(Exception e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

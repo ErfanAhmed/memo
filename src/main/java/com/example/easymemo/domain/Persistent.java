@@ -2,6 +2,8 @@ package com.example.easymemo.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.MappedSuperclass;
 import java.util.Date;
@@ -15,7 +17,11 @@ import java.util.Date;
 @MappedSuperclass
 public abstract class Persistent {
 
+    @CreationTimestamp
     private Date created;
+
+    @UpdateTimestamp
     private Date updated;
+
     private int version;
 }

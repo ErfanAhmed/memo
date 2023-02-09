@@ -2,10 +2,13 @@ package com.example.easymemo.service;
 
 import com.example.easymemo.domain.Product;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+
+import static com.example.easymemo.utils.Utils.isValidIdentifier;
 
 /**
  * @author erfan
@@ -24,5 +27,16 @@ public class ProductService {
 
     public Product findById(long id) {
         return em.find(Product.class, id);
+    }
+
+    @Transactional
+    public Product save(Product product) {
+        if (isValidIdentifier(product.getId())) {
+            em.persist(product);
+        } else {
+            product = em.merge(product);
+        }
+
+        return product;
     }
 }

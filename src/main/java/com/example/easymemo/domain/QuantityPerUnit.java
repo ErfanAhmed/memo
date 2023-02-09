@@ -28,7 +28,7 @@ public class QuantityPerUnit extends Persistent {
     private int amount;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "id")
     private Product product;

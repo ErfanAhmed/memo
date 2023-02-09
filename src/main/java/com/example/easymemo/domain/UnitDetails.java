@@ -25,7 +25,7 @@ public class UnitDetails extends Persistent {
     private int amount;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @MapsId
     @JoinColumn(name = "id")
     private Product product;
