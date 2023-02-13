@@ -9,6 +9,9 @@ import javax.persistence.*;
 /**
  * @author erfan
  * @since 2/8/23
+ *
+ * i.e. Tissue 20 box; each box contains 30 pcs tissue.
+ * Here, 30 pcs is the UniteDetails of BOX.
  */
 @Data
 @NoArgsConstructor

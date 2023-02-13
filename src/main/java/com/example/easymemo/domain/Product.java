@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Objects;
+import javax.validation.constraints.NotEmpty;
 
 import static java.util.Objects.nonNull;
 
@@ -29,6 +29,7 @@ public class Product extends Persistent {
     @SequenceGenerator(name = "productSeq", sequenceName = "product_seq", allocationSize = 1)
     private long id;
 
+    @NotEmpty()
     @Column(nullable = false)
     private String name;
 

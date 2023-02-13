@@ -1,13 +1,18 @@
 package com.example.easymemo.controller;
 
 import com.example.easymemo.domain.Product;
+import com.example.easymemo.exceptionHandler.ExceptionHandlerUtil;
+import com.example.easymemo.model.CustomFieldError;
 import com.example.easymemo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author erfan
@@ -20,8 +25,12 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ExceptionHandlerUtil exceptionHandlerUtil;
+
     @GetMapping
     public ResponseEntity<Product> list() {
+        //todo: add shop constraint, role check
         List<Product> products = productService.getProducts();
 
         return new ResponseEntity(products, HttpStatus.OK);
@@ -29,16 +38,23 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> show(@PathVariable long id) {
+        //todo: add shop constraint, role check
         Product product = productService.findById(id);
 
         return new ResponseEntity(product.getProductDetails(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody Product product) {
+    public ResponseEntity<?> save(@Valid @RequestBody Product product, BindingResult bindingResult) {
+        //todo: add shop constraint, role check
+
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(exceptionHandlerUtil.handleCustomFieldErrors(bindingResult), HttpStatus.BAD_REQUEST);
+        }
+
         productService.save(product);
 
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
 
