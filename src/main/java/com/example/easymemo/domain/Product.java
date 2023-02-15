@@ -29,7 +29,7 @@ public class Product extends Persistent {
     @SequenceGenerator(name = "productSeq", sequenceName = "product_seq", allocationSize = 1)
     private long id;
 
-    @NotEmpty()
+    @NotEmpty(message = "{product.name.not.empty}")
     @Column(nullable = false)
     private String name;
 

@@ -5,6 +5,8 @@ import com.example.easymemo.exceptionHandler.ExceptionHandlerUtil;
 import com.example.easymemo.model.CustomFieldError;
 import com.example.easymemo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -27,6 +29,9 @@ public class ProductController {
 
     @Autowired
     private ExceptionHandlerUtil exceptionHandlerUtil;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @GetMapping
     public ResponseEntity<Product> list() {
