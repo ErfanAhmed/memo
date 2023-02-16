@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +52,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody Product product, BindingResult bindingResult) {
-        //todo: add shop constraint, role check
+        //todo: auth check - add shop constraint, role check
 
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(exceptionHandlerUtil.handleCustomFieldErrors(bindingResult), HttpStatus.BAD_REQUEST);
@@ -62,6 +63,13 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
 
+    @PatchMapping
+    public ResponseEntity<?> update(@RequestBody Product updatedProduct) {
+        //todo: auth check, validation
+        updatedProduct = productService.update(updatedProduct);
+
+        return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+    }
 
     @ExceptionHandler
     public ResponseEntity<?> handleException(Exception e) {
