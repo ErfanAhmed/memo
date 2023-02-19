@@ -71,7 +71,6 @@ public class Product extends Persistent {
         }
     }
 
-    @JsonIgnore
     public String getProductDetails() {
         return "Product name: " + name
                 + " " + quantityPerUnit()

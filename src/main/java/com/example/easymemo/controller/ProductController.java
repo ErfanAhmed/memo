@@ -2,20 +2,16 @@ package com.example.easymemo.controller;
 
 import com.example.easymemo.domain.Product;
 import com.example.easymemo.exceptionHandler.ExceptionHandlerUtil;
-import com.example.easymemo.model.CustomFieldError;
 import com.example.easymemo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author erfan
@@ -32,7 +28,7 @@ public class ProductController {
     private ExceptionHandlerUtil exceptionHandlerUtil;
 
     @Autowired
-    private MessageSource messageSource;
+    private MessageSourceAccessor msa;
 
     @GetMapping
     public ResponseEntity<Product> list() {
@@ -47,7 +43,7 @@ public class ProductController {
         //todo: add shop constraint, role check
         Product product = productService.findById(id);
 
-        return new ResponseEntity(product.getProductDetails(), HttpStatus.OK);
+        return new ResponseEntity(product, HttpStatus.OK);
     }
 
     @PostMapping
@@ -58,7 +54,7 @@ public class ProductController {
             return new ResponseEntity<>(exceptionHandlerUtil.handleCustomFieldErrors(bindingResult), HttpStatus.BAD_REQUEST);
         }
 
-        productService.save(product);
+        product = productService.save(product);
 
         return new ResponseEntity<>(product, HttpStatus.CREATED);
     }
@@ -69,6 +65,15 @@ public class ProductController {
         updatedProduct = productService.update(updatedProduct);
 
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> delete(@RequestBody Product product) {
+        productService.delete(product);
+
+        return new ResponseEntity<>(msa.getMessage("product.action",
+                new Object[]{product.getName(), "deleted"}),
+                HttpStatus.OK);
     }
 
     @ExceptionHandler

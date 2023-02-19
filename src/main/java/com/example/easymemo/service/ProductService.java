@@ -1,15 +1,17 @@
 package com.example.easymemo.service;
 
 import com.example.easymemo.domain.Product;
+import com.example.easymemo.repository.ProductRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.MessageSourceAccessor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.easymemo.utils.Utils.isValidIdentifier;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -20,38 +22,40 @@ import static java.util.Optional.ofNullable;
 public class ProductService {
 
     //todo: JPA data repository
+    @Autowired
+    private ProductRepository productRepository;
 
-    @PersistenceContext
-    private EntityManager em;
+    @Autowired
+    private MessageSourceAccessor msa;
 
     public List<Product> getProducts() {
-        return em.createNamedQuery("product.getAll", Product.class)
-                .getResultList();
+        return productRepository.findAll();
     }
 
     public Product findById(long id) {
-        return em.find(Product.class, id);
+        return productRepository
+                .findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        msa.getMessage("product.not.found", new Object[]{id})));
     }
 
-    @Transactional
     public Product save(Product product) {
-        if (isValidIdentifier(product.getId())) {
-            em.persist(product);
-        } else {
-            product = em.merge(product);
-        }
-
-        return product;
+        return productRepository.save(product);
     }
 
-    @Transactional
     public Product update(Product updatedProduct) {
-        Product productToUpdate = findById(updatedProduct.getId());
+        Product sourceProduct = findById(updatedProduct.getId());
 
-        ofNullable(updatedProduct.getName()).ifPresent(productToUpdate::setName);
-        ofNullable(updatedProduct.getQuantity()).ifPresent(productToUpdate::setQuantity);
-        ofNullable(updatedProduct.getDescription()).ifPresent(productToUpdate::setDescription);
+        ofNullable(updatedProduct.getName()).ifPresent(sourceProduct::setName);
+        ofNullable(updatedProduct.getQuantity()).ifPresent(sourceProduct::setQuantity);
+        ofNullable(updatedProduct.getDescription()).ifPresent(sourceProduct::setDescription);
 
-        return em.merge(productToUpdate);
+        return productRepository.save(sourceProduct);
+    }
+
+    public void delete(Product product) {
+        product = findById(product.getId());
+
+        productRepository.delete(product);
     }
 }
