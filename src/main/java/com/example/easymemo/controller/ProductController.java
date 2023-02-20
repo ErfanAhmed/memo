@@ -21,6 +21,8 @@ import java.util.List;
 @RequestMapping(value = "/v1/products")
 public class ProductController {
 
+    //todo: add logger
+
     @Autowired
     private ProductService productService;
 
@@ -33,6 +35,7 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<Product> list() {
         //todo: add shop constraint, role check
+        
         List<Product> products = productService.getProducts();
 
         return new ResponseEntity(products, HttpStatus.OK);
@@ -41,6 +44,7 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<?> show(@PathVariable long id) {
         //todo: add shop constraint, role check
+
         Product product = productService.findById(id);
 
         return new ResponseEntity(product, HttpStatus.OK);
@@ -62,6 +66,8 @@ public class ProductController {
     @PatchMapping
     public ResponseEntity<?> update(@RequestBody Product updatedProduct) {
         //todo: auth check, validation
+        //todo: what about data validation - @Valid, @Validator, CustomValidator
+
         updatedProduct = productService.update(updatedProduct);
 
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
@@ -69,6 +75,8 @@ public class ProductController {
 
     @DeleteMapping
     public ResponseEntity<?> delete(@RequestBody Product product) {
+        //todo: auth, validation, soft delete
+
         productService.delete(product);
 
         return new ResponseEntity<>(msa.getMessage("product.action",
