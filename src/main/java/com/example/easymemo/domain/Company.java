@@ -1,6 +1,7 @@
 package com.example.easymemo.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import javax.persistence.*;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Table
 @Entity
 public class Company extends Persistent {

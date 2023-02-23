@@ -28,6 +28,6 @@ public class CustomErrorController implements ErrorController {
 
         HttpStatus httpStatus = HttpStatus.resolve(Integer.valueOf(status.toString()));
 
-        return new ResponseEntity<>("Hmm something is wrong!",httpStatus);
+        return new ResponseEntity<>("Hmm something is wrong!", httpStatus);
     }
 }

@@ -2,6 +2,7 @@ package com.example.easymemo.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import javax.persistence.*;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Table
 @Entity
 public class UnitDetails extends Persistent {

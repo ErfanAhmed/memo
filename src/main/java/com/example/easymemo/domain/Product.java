@@ -1,8 +1,7 @@
 package com.example.easymemo.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -14,7 +13,10 @@ import static java.util.Objects.nonNull;
  * @since 1/12/23
  */
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 @Table
 @Entity
 @NamedQueries(
