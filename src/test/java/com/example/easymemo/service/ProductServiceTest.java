@@ -2,7 +2,6 @@ package com.example.easymemo.service;
 
 import com.example.easymemo.domain.Product;
 import com.example.easymemo.repository.ProductRepository;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,13 +10,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
@@ -54,6 +56,19 @@ class ProductServiceTest {
 
         //then
         verify(productRepository).findById(anyLong());
+    }
+
+    @Test
+    @DisplayName("Will throw ResponseStatusException")
+    void willThrowWhenIdNotFound() {
+        //given
+        long productId = anyLong();
+
+        //when
+        //then
+        assertThatThrownBy(() -> productService.findById(productId))
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessageContaining(NOT_FOUND.toString());
     }
 
     @Test
