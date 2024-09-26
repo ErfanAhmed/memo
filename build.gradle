@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.7'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'org.liquibase.gradle' version '2.0.4'
 }
 
 group = 'com.example'
@@ -21,13 +22,36 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.liquibase:liquibase-core'
-	compileOnly 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+//	implementation 'org.liquibase:liquibase-core:4.19.0'
 	runtimeOnly 'org.postgresql:postgresql'
+	liquibaseRuntime 'org.postgresql:postgresql'
+	liquibaseRuntime 'org.liquibase:liquibase-core:4.19.0'
+
+
+	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+liquibase {
+	activities {
+		main {
+			changelogFile "src/main/resources/db/changelog/db.changelog-master.xml"
+			url "jdbc:postgresql://localhost:5432/easymemo"
+			driver "org.postgresql.Driver"
+			username "postgres"
+			password "root"
+			classpath "$rootDir"
+		}
+	}
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+task 'freshRun' (dependsOn: ['dropAll', 'update', 'bootRun'])
+update.mustRunAfter dropAll
+bootRun.mustRunAfter update
